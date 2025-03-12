@@ -3,7 +3,8 @@
 ```md
 # 🤖 AskSaclayAI: Your AI Assistant for University Paris-Saclay
 
-![AskSaclayAI](assets/asksaclayai_banner.png)  
+<!-- ![AskSaclayAI](assets/asksaclayai_banner.png)   -->
+![AskSaclayAI](assets/asksaclayai_banner.png) 
 
 🚀 Welcome to **AskSaclayAI**, an AI-powered chatbot designed to assist students, researchers, and staff at **University Paris-Saclay**. Whether you need academic information, campus details, or research assistance, AskSaclayAI is here to help!
 
@@ -75,6 +76,8 @@ streamlit run app_bot.py
 
 🔹 **Login Screen**  
 ![Login](assets/login_screen.png)  
+
+
 
 🔹 **Chat Interface**  
 ![Chat](assets/asksaclayai_banner.png)  
