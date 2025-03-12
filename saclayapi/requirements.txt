@@ -1,0 +1,21 @@
+# Core dependencies
+fastapi==0.95.2
+uvicorn==0.22.0
+
+# Chatbot dependencies
+langchain==0.0.200
+langchain-groq==0.1.0
+langchain-openai==0.0.5
+langchain-community==0.0.10
+transformers==4.30.0
+python-dotenv==1.0.0
+
+# Telegram integration
+python-telegram-bot==20.3
+httpx==0.24.0
+
+# WhatsApp integration (Twilio)
+twilio==8.3.0
+
+# Additional utilities
+pydantic==1.10.7
