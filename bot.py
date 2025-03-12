@@ -63,18 +63,58 @@ def load_pdfs():
         documents.extend(docs)
     return documents
 
-# Initialize tools
+# # Initialize tools
+# def initialize_tools():
+#     # Load PDF documents
+#     documents = load_pdfs()
+
+#     # Using OpenAI Embeddings
+#     persist_directory = "./chroma_store"
+#     os.makedirs(persist_directory, exist_ok=True)
+#     embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
+#     text_splitter = RecursiveCharacterTextSplitter(chunk_size=5000, chunk_overlap=500)
+#     splits = text_splitter.split_documents(documents)
+#     vectorstore = Chroma.from_documents(documents=splits, embedding=embeddings, persist_directory=persist_directory)
+#     retriever_pdf = vectorstore.as_retriever()
+
+#     # Create PDF retriever tool
+#     retriever_pdf_tool = create_retriever_tool(retriever_pdf, name="pdf_retriever", description="Retrieve relevant information from uploaded PDF documents.")
+
+#     # Web scraping tools (Paris-Saclay website)
+#     loader_website = WebBaseLoader("https://www.universite-paris-saclay.fr")
+#     docs_web = loader_website.load()
+#     documents_web = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200).split_documents(docs_web)
+#     vectordb_web = FAISS.from_documents(documents_web, embeddings)
+#     retriever_web = vectordb_web.as_retriever()
+#     retriever_web_tool = create_retriever_tool(retriever_web, "paris-saclay-search", "Search any information about Paris-Saclay University")
+
+#     # Wikipedia tool
+#     api_wapper_wiki = WikipediaAPIWrapper(top_k_results=1, doc_content_chars_max=250)
+#     wiki = WikipediaQueryRun(api_wrapper=api_wapper_wiki)
+
+#     # DuckDuckGo search tool
+#     duckduckgo_search = DuckDuckGoSearchRun()
+
+#     # Combine tools into a list
+#     tools = [retriever_pdf_tool, wiki, duckduckgo_search, retriever_web_tool]
+#     return tools
+
+#__________________________________________________
+#__________________________________________________
+#__________________________________________________
+#UPDATE initialize_tools function using FAISS instead of chromadb
+
 def initialize_tools():
     # Load PDF documents
     documents = load_pdfs()
 
     # Using OpenAI Embeddings
-    persist_directory = "./chroma_store"
-    os.makedirs(persist_directory, exist_ok=True)
     embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=5000, chunk_overlap=500)
     splits = text_splitter.split_documents(documents)
-    vectorstore = Chroma.from_documents(documents=splits, embedding=embeddings, persist_directory=persist_directory)
+
+    # Initialize FAISS vector store
+    vectorstore = FAISS.from_documents(documents=splits, embedding=embeddings)
     retriever_pdf = vectorstore.as_retriever()
 
     # Create PDF retriever tool
@@ -89,8 +129,8 @@ def initialize_tools():
     retriever_web_tool = create_retriever_tool(retriever_web, "paris-saclay-search", "Search any information about Paris-Saclay University")
 
     # Wikipedia tool
-    api_wapper_wiki = WikipediaAPIWrapper(top_k_results=1, doc_content_chars_max=250)
-    wiki = WikipediaQueryRun(api_wrapper=api_wapper_wiki)
+    api_wrapper_wiki = WikipediaAPIWrapper(top_k_results=1, doc_content_chars_max=250)
+    wiki = WikipediaQueryRun(api_wrapper=api_wrapper_wiki)
 
     # DuckDuckGo search tool
     duckduckgo_search = DuckDuckGoSearchRun()
@@ -98,6 +138,7 @@ def initialize_tools():
     # Combine tools into a list
     tools = [retriever_pdf_tool, wiki, duckduckgo_search, retriever_web_tool]
     return tools
+
 
 # Initialize the chatbot
 def initialize_bot(tools, groq_api_key):
